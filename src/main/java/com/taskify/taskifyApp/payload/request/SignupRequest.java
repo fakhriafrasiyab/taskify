@@ -5,9 +5,7 @@ import java.util.Set;
 import javax.validation.constraints.*;
 
 public class SignupRequest {
-    @NotBlank
-    @Size(min = 3, max = 20)
-    private String username;
+    private String name;
 
     @NotBlank
     @Size(max = 50)
@@ -20,10 +18,18 @@ public class SignupRequest {
     @Size(min = 6, max = 40)
     private String password;
 
+    private String organizationName;
 
+    private String phoneNumber;
 
-    public void setUsername(String username) {
-        this.username = username;
+    private String address;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getEmail() {
@@ -48,5 +54,29 @@ public class SignupRequest {
 
     public void setRole(Set<String> role) {
         this.role = role;
+    }
+
+    public String getOrganizationName() {
+        return organizationName;
+    }
+
+    public void setOrganizationName(String organizationName) {
+        this.organizationName = organizationName;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

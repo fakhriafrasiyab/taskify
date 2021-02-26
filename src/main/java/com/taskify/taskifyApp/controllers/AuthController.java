@@ -18,6 +18,7 @@ import com.taskify.taskifyApp.repository.RoleRepository;
 import com.taskify.taskifyApp.repository.UserRepository;
 import com.taskify.taskifyApp.security.jwt.JwtUtils;
 import com.taskify.taskifyApp.security.services.UserDetailsImpl;
+import com.taskify.taskifyApp.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -30,6 +31,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
@@ -40,6 +42,8 @@ public class AuthController {
     @Autowired
     UserRepository userRepository;
 
+    AuthService authService;
+
     @Autowired
     RoleRepository roleRepository;
 
@@ -48,6 +52,10 @@ public class AuthController {
 
     @Autowired
     JwtUtils jwtUtils;
+
+    public AuthController(AuthService authService) {
+        this.authService = authService;
+    }
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -81,35 +89,9 @@ public class AuthController {
         }
 
         // Create new user's account
-        User user = new User(signUpRequest.getEmail(),
-                encoder.encode(signUpRequest.getPassword()));
-
-        Set<String> strRoles = signUpRequest.getRole();
-        Set<Role> roles = new HashSet<>();
-
-        if (strRoles == null) {
-            Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(userRole);
-        } else {
-            strRoles.forEach(role -> {
-                switch (role) {
-                    case "admin":
-                        Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(adminRole);
-
-                        break;
-                    default:
-                        Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(userRole);
-                }
-            });
-        }
-
-        user.setRoles(roles);
-        userRepository.save(user);
+        User user = authService.store(signUpRequest.getName(), signUpRequest.getEmail(), signUpRequest.getPassword(),
+                signUpRequest.getOrganizationName(), signUpRequest.getPhoneNumber(), signUpRequest.getAddress()
+        );
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }

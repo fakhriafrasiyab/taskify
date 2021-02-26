@@ -20,7 +20,17 @@ public class Organization {
     @ManyToOne(cascade = CascadeType.REMOVE)
     private User user;
 
-    @Column(name = "created_at",nullable = false,updatable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
+
+    public Organization(String name, String phoneNumber, String address, User user) {
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.user = user;
+    }
+
+    public Organization() {
+    }
 }
