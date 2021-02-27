@@ -14,7 +14,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private long id;
+    private Integer id;
 
     private String name;
 
@@ -33,7 +33,7 @@ public class User {
         this.password = password;
     }
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne(cascade = CascadeType.ALL)
     private Organization organization;
 
     @ManyToMany(fetch = FetchType.LAZY)

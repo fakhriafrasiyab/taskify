@@ -17,7 +17,7 @@ public class Organization {
     private String phoneNumber;
     private String address;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne(cascade = CascadeType.ALL)
     private User user;
 
     @Column(name = "created_at", nullable = false, updatable = false)
