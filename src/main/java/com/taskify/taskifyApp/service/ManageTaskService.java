@@ -1,6 +1,7 @@
 package com.taskify.taskifyApp.service;
 
 
+import com.taskify.taskifyApp.dto.TaskDTO;
 import com.taskify.taskifyApp.entity.Status;
 import com.taskify.taskifyApp.entity.Task;
 import com.taskify.taskifyApp.entity.User;
@@ -34,6 +35,7 @@ public class ManageTaskService {
             task.setDescription(description);
             task.setDeadline(deadline);
             task.setStatus(status);
+            task.setOrganization(user.get().getOrganization());
             taskRepository.save(task);
         }
         List<User> users = new ArrayList<>();
@@ -46,6 +48,22 @@ public class ManageTaskService {
             task.setAssignee(users);
             taskRepository.save(task);
         }
+    }
+
+    public List<TaskDTO> getList(String email) {
+        Optional<User> user = userRepository.findByEmail(email);
+        List<TaskDTO> taskDTOS = new ArrayList<>();
+        if (user.isPresent()) {
+            List<Task> tasks = taskRepository.getByOrganizationId(user.get().getOrganization().getId());
+            for (Task task : tasks) {
+                taskDTOS.add(new TaskDTO(
+                        task.getId(), task.getTitle(), task.getDescription(),
+                        task.getDeadline(), task.getCreatedAt(),
+                        task.getAssignee(), task.getStatus()
+                ));
+            }
+        }
+        return taskDTOS;
     }
 }
 

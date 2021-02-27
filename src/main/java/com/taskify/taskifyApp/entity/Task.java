@@ -29,6 +29,9 @@ public class Task {
     @OneToMany(cascade = CascadeType.ALL)
     private List<User> assignee;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Organization organization;
+
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private Status status;

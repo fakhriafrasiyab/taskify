@@ -14,7 +14,7 @@ import javax.validation.Valid;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/task")
+@RequestMapping("/api/tasks")
 public class ManageTaskController {
 
     private ManageTaskService manageTaskService;
@@ -23,12 +23,17 @@ public class ManageTaskController {
         this.manageTaskService = manageTaskService;
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<?> createAndAssignTask(@Valid @RequestBody TaskStoreRequest taskStoreRequest, Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         manageTaskService.createAndAssignTask(taskStoreRequest.getTitle(), taskStoreRequest.getDescription(),
                 taskStoreRequest.getDeadline(), taskStoreRequest.getStatus(),
                 taskStoreRequest.getAssignee(), userDetails.getUsername());
         return ResponseEntity.ok(new MessageResponse("User created and assign task successfully"));
+    }
+    @GetMapping
+    public ResponseEntity<?> listTasks(Authentication authentication) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        return ResponseEntity.ok(manageTaskService.getList(userDetails.getUsername()));
     }
 }
