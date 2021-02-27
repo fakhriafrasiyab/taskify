@@ -9,22 +9,30 @@ import java.util.List;
 
 @Entity
 @Data
-public class Tasks {
+public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private long id;
+
     private String title;
+
     private String description;
+
     @Column(name = "deadline")
     private LocalDateTime deadline;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
+
     @OneToMany(cascade = CascadeType.REMOVE)
     private List<User> assignee;
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private Status status;
+
+    public Task() {
+    }
 }
