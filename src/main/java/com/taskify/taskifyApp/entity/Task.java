@@ -26,8 +26,11 @@ public class Task {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.REMOVE)
     private List<User> assignee;
+
+    @ManyToOne(cascade = CascadeType.REMOVE)
+    private Organization organization;
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
