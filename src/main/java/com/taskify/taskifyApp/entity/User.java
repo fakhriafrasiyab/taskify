@@ -33,7 +33,7 @@ public class User {
         this.password = password;
     }
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.REMOVE)
     private Organization organization;
 
     @ManyToMany(fetch = FetchType.LAZY)
