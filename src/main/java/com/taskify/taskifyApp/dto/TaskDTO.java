@@ -17,10 +17,10 @@ public class TaskDTO {
     private LocalDateTime deadline;
     private LocalDateTime createdAt;
 
-    private List<User> assignee;
+    private List<UserDTO> assignee;
     private Status status;
 
-    public TaskDTO(long id, String title, String description, LocalDateTime deadline, LocalDateTime createdAt, List<User> assignee, Status status) {
+    public TaskDTO(long id, String title, String description, LocalDateTime deadline, LocalDateTime createdAt, List<UserDTO> assignee, Status status) {
         this.id = id;
         this.title = title;
         this.description = description;

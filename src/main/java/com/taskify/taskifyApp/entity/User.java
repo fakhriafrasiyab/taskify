@@ -1,6 +1,8 @@
 package com.taskify.taskifyApp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -33,6 +35,7 @@ public class User {
         this.password = password;
     }
 
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.REMOVE)
     private Organization organization;
 
