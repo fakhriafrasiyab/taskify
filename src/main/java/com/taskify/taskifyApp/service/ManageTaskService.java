@@ -6,6 +6,8 @@ import com.taskify.taskifyApp.dto.UserDTO;
 import com.taskify.taskifyApp.entity.Status;
 import com.taskify.taskifyApp.entity.Task;
 import com.taskify.taskifyApp.entity.User;
+import com.taskify.taskifyApp.enums.BRStatus;
+import com.taskify.taskifyApp.payload.response.BaseResponse;
 import com.taskify.taskifyApp.repository.RoleRepository;
 import com.taskify.taskifyApp.repository.TaskRepository;
 import com.taskify.taskifyApp.repository.UserRepository;
@@ -30,8 +32,9 @@ public class ManageTaskService {
         this.emailService = emailService;
     }
 
-    public void createAndAssignTask(String title, String description, LocalDateTime deadline, Status status, List<Integer> assignee, String userEmail) {
+    public BaseResponse createAndAssignTask(String title, String description, LocalDateTime deadline, Status status, List<Integer> assignee, String userEmail) {
         Optional<User> user = userRepository.findByEmail(userEmail);
+        BaseResponse baseResponse = new BaseResponse(BRStatus.SUCCESS);
         Task task = new Task();
         if (user.isPresent()) {
             task.setTitle(title);
@@ -52,8 +55,9 @@ public class ManageTaskService {
                 mailUser.ifPresent(value -> emailService.sendSimpleMessage(value.getEmail(), "New Task", "Yeni Task assign olundu,gozun aydin"));
             }
             task.setAssignee(users);
-            taskRepository.save(task);
+            baseResponse.setData(taskRepository.save(task));
         }
+        return baseResponse;
     }
 
     public List<TaskDTO> getList(String email) {
@@ -74,6 +78,12 @@ public class ManageTaskService {
             }
         }
         return taskDTOS;
+    }
+
+    public BaseResponse getTaskList(String email) {
+        BaseResponse baseResponse = new BaseResponse(BRStatus.SUCCESS);
+        baseResponse.setData(getList(email));
+        return baseResponse;
     }
 }
 

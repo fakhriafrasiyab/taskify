@@ -26,7 +26,7 @@ public class Task {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @ManyToMany(cascade = CascadeType.REMOVE)
+    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)
     private List<User> assignee;
 
     @ManyToOne(cascade = CascadeType.REMOVE)
